@@ -11,4 +11,3 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 }
-// viewBinding qo'shib qoydim
