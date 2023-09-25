@@ -2,7 +2,7 @@ package com.example.helloworld
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.helloworld.databinding.ActivityMainBinding
+import com.asadullo.wordsapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }

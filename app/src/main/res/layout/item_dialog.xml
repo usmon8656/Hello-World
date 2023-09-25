@@ -6,23 +6,13 @@
     android:layout_height="wrap_content">
 
     <EditText
-        android:id="@+id/edt_eng"
+        android:id="@+id/edt_group_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/item1"
         android:layout_margin="10dp"
         android:padding="15dp"
-        android:hint="English"
-        />
-
-    <EditText
-        android:id="@+id/edt_uzb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/item1"
-        android:layout_margin="10dp"
-        android:padding="15dp"
-        android:hint="Uzbek"
+        android:hint="Group name"
         />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -32,10 +22,10 @@
         android:layout_margin="10dp"
         android:padding="10dp"
         android:text="Add"
-        android:textColor="#fff"
+        android:textColor="#070707"
+        android:backgroundTint="#26D7ED"
         android:textSize="20sp"
         android:background="@drawable/item1"
-        android:backgroundTint="#26D7ED"
         />
 
 </LinearLayout>
