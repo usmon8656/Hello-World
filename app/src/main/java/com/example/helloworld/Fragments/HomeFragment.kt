@@ -1,60 +1,66 @@
 package com.example.helloworld.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.asadullo.wordsapp.R
+import com.asadullo.wordsapp.databinding.FragmentHomeBinding
+import com.asadullo.wordsapp.databinding.ItemDialogBinding
+import com.example.helloworld.Adapter.MyAdapter
+import com.example.helloworld.DB.DbHelperWords
+import com.example.helloworld.Models.User
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
+    private lateinit var dbHelper: DbHelperWords
+    private lateinit var adapter: MyAdapter
+    private lateinit var list :ArrayList<User>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+
+        dbHelper = DbHelperWords.getIns(binding.root.context)
+        list = dbHelper.dao().getAllGroups() as ArrayList<User>
+        adapter = MyAdapter(list, object : MyAdapter.Clikc{
+            override fun click(user: User, position: Int, unit: String) {
+                findNavController().navigate(R.id.wordsFragment, bundleOf("group" to unit, "keyGroup" to user))
+            }
+        })
+        binding.rv.adapter = adapter
+
+        binding.add.setOnClickListener {
+            val item = ItemDialogBinding.inflate(LayoutInflater.from(binding.root.context))
+            val dialog = BottomSheetDialog(binding.root.context)
+            dialog.setContentView(item.root)
+
+            item.btnAdd.setOnClickListener {
+                val user = User(item.edtGroupName.text.toString())
+                dbHelper.dao().addGroup(user)
+                binding.rv.adapter = adapter
+                onResume()
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        }
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onResume() {
+        super.onResume()
+
+        adapter.list.clear()
+        adapter.list.addAll(dbHelper.dao().getAllGroups())
+        adapter.notifyDataSetChanged()
     }
+
+
 }
