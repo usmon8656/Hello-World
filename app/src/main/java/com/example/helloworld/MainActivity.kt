@@ -2,7 +2,6 @@ package com.example.helloworld
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.view.GravityCompat
 import com.asadullo.wordsapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
